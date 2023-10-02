@@ -19,10 +19,10 @@ void findMinMaxPrice() {
     max = sd.price[0];
     min = sd.price[0];
     for (int i=1; i<170; i++) {
-        if (sd.price[i] > max){
+        if (sd.price[i] > max) {
             max = sd.price[i];
         }
-        if(sd.price[i] < min){
+        if(sd.price[i] < min) {
             min = sd.price[i];
         }
     }
@@ -33,7 +33,7 @@ void findMinMaxTotalShareholders() {
     max = sd.rate[0];
     min = sd.rate[0];
     for (int i=0; i<170; i++) {
-        if (sd.rate[i] > max){
+        if (sd.rate[i] > max) {
             max = sd.rate[i];
             maxk = i;
         }

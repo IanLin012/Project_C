@@ -8,8 +8,8 @@
 
 #define co coefficient
 #define ex exponent
-#define altoi(A) ((A)-'A')  // alpha to index
-#define MAX_POLYS 30        // (A-Z)
+#define altoi(A) ((A)-'A') // alpha to index
+#define MAX_POLYS 30       // (A-Z)
 
 typedef struct Polynominal {
     double coefficient;
@@ -52,9 +52,7 @@ void Peval();
 Poly *polyHead[MAX_POLYS]={0};
 Poly *polyBack[MAX_POLYS]={0};
 
-
 int main() {
-
     // reads 1-6 for different functionality
     char cmd;
     while(scanf("%c", &cmd)) {
@@ -83,8 +81,6 @@ int main() {
     }
     return 0;
 }
-
-
 
 void delList_inArr(char i) {
     Poly *cur = polyHead[i], *next;
@@ -282,7 +278,6 @@ void readPoly() {
             readPoly();
             return;
         }
-        
         // store data
         pushList_inArr(alpha, dco, iex);
 
@@ -292,7 +287,6 @@ void readPoly() {
 void printPoly() {
     char c;
     Poly *node;
-
     printf("printPoly(): ");
     fflush(stdin);
     scanf("%c", &c);
@@ -303,7 +297,6 @@ void printPoly() {
         printf("Not exist.\n");
         return;
     }
-
     printfPoly(node);
 }
 
@@ -348,10 +341,8 @@ void Padd() {
             p2 = p2->nterm;
         }
     }
-
     printfPoly(*ansHead);
     delList(ansHead);
-
 }
 
 void Pmult() {
@@ -367,11 +358,9 @@ void Pmult() {
         printf("The variable(s) is empty!\n");
         return;
     }
-
     double co;
     int ex;
     char notCreate=1;
-
     // iterate p1
     while(p1 != NULL) {
         // iterate p2
@@ -414,10 +403,8 @@ void Pmult() {
         p1 = p1->nterm;
         p2 = polyHead[c2];
     }
-
     printfPoly(*ansHead);
     delList(ansHead);
-
 }
 
 void Peval() {
@@ -432,6 +419,5 @@ void Peval() {
         ans += p->co * pow(x, p->ex);
         p = p->nterm;
     }
-
     printf("%.1lf\n", ans);
 }

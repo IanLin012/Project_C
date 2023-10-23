@@ -1,15 +1,17 @@
 #include <stdio.h>
 
-// ¥þ°ì«Å§i
+// variable declare
 long long arr[26][1000][1000], col[26]={0}, row[26]={0}, ct_read=0;
 char alph[26] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+// subroutine declare
 void readSparseMatrixs();
 void printSparseMatrix();
 void addSparseMatrix();
 void fastTranspose();
 void matrixMultiply();
 
-// ¥Dµ{¦¡
+// main
 int main() {
     int func;
     while(scanf("%d", &func) != EOF) {
@@ -23,7 +25,7 @@ int main() {
     return 0;
 }
 
-// Åª¤Jµ}²¨¯x°}
+// read
 void readSparseMatrixs() {
     ct_read+=1;
     int c, r, b=0, ct_0, t_alph=0;
@@ -55,7 +57,7 @@ void readSparseMatrixs() {
     }
 }
 
-// ¦C¦Lµ}²¨¯x°}
+// print (2 \n alph)
 void printSparseMatrix() {
     int ct_print = 0;
     for(int k=0; k<26; k++) {
@@ -74,7 +76,7 @@ void printSparseMatrix() {
     }
 }
 
-// µ}²¨¯x°}¬Û¥[
+// add (3 \n alph1 alph2)
 void addSparseMatrix() {
     long long add = 0;
     char al1, al2;
@@ -94,7 +96,7 @@ void addSparseMatrix() {
     }
 }
 
-// §Ö³tÂà¸m¯x°}
+// transpose (4 \n alph)
 void fastTranspose() {
     char al;
     scanf("%c", &al);
@@ -109,7 +111,7 @@ void fastTranspose() {
     }
 }
 
-// µ}²¨¯x°}¬Û­¼
+// multiply (5 \n alph1 alph2)
 void matrixMultiply() {
     long long mul[1000][1000];
     char al1, al2;

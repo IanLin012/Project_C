@@ -8,8 +8,8 @@
 
 #define co coefficient
 #define ex exponent
-#define altoi(A) ((A)-'A') // alpha to index
-#define MAX_POLYS 30       // (A-Z)
+#define altoi(A) ((A)-'A')  // alpha to index
+#define MAX_POLYS 30        // (A-Z)
 
 typedef struct Polynominal {
     double coefficient;
@@ -20,7 +20,6 @@ typedef struct Polynominal {
 /////////////////////
 /* other functions */
 /////////////////////
-
 // Delete whole list and *head from poly[]
 void delList_inArr(char);
 // Delete whole list from pointer given
@@ -52,7 +51,9 @@ void Peval();
 Poly *polyHead[MAX_POLYS]={0};
 Poly *polyBack[MAX_POLYS]={0};
 
+
 int main() {
+
     // reads 1-6 for different functionality
     char cmd;
     while(scanf("%c", &cmd)) {
@@ -81,6 +82,8 @@ int main() {
     }
     return 0;
 }
+
+
 
 void delList_inArr(char i) {
     Poly *cur = polyHead[i], *next;
@@ -125,7 +128,6 @@ void pushList_inArr(char i, double co, int ex) {
         polyBack[i]->nterm = node;
         polyBack[i] = node;
     }
-
 }
 
 void push(Poly **head, double co, int ex) {
@@ -146,7 +148,6 @@ void push(Poly **head, double co, int ex) {
         }
         tmp->nterm = node;
     }
-
 }
 
 char *substr(char* str, int n) {
@@ -173,11 +174,9 @@ void printfPoly(Poly *head) {
         // if exp. > 1
         if(tmp->ex != 0 && tmp->ex != 1)
             printf("^%d", tmp->ex);
-
         tmp = tmp->nterm;
         firstTerm = 0;
     }
-
     printf("\n");
 }
 
@@ -201,7 +200,8 @@ void readPoly() {
         printf("erro1 at - %c\n", *iptr);
         readPoly();
         return;
-    } else alpha = *iptr;
+    }
+    else alpha = *iptr;
 
     iptr++;
 
@@ -222,7 +222,6 @@ void readPoly() {
     int len=0;
     alpha = altoi(alpha);
     delList_inArr(alpha);
-
     while(*iptr != '\0') {
         /* PROCESS coefficient */
         next = iptr;
@@ -272,12 +271,13 @@ void readPoly() {
         else if(*iptr == '\0' || (*iptr == '+' || *iptr == '-')) {
             iex = 1;
         }
-        // the input is not illegal 
+        // the input is illegal 
         else {
             printf("erro3 at - %c", *iptr);
             readPoly();
             return;
         }
+        
         // store data
         pushList_inArr(alpha, dco, iex);
 
@@ -314,33 +314,45 @@ void Padd() {
         return;
     }
     // iterate p1 & p2
-    while(p1 != NULL || p2 != NULL) {
+    while(1) {
+        printf("-\n");
+        if(p1 == NULL && p2 == NULL) break;
+        printf("DEBUG | %d | %d\n", p1->ex, p2->ex); // SEGMENTATION ERR HERE //
         // if one of two poly has reach the end
         if(p1 == NULL) {
             push(&ans, p2->co, p2->ex);
             p2 = p2->nterm;
+            printf("DEBUG | break 1.\n");
             continue;
         }
         if(p2 == NULL) {
             push(&ans, p1->co, p1->ex);
             p1 = p1->nterm;
+            printf("DEBUG | break 2.\n");
             continue;
         }
         // compare the exp. of two polys
         if(p1->ex > p2->ex) {
             push(&ans, p1->co, p1->ex);
             p1 = p1->nterm;
+            printf("DEBUG | break 3.\n");
+            continue;
         }
         if(p1->ex < p2->ex) {
             push(&ans, p2->co, p2->ex);
             p2 = p2->nterm;
+            printf("DEBUG | break 4.\n");
+            continue;
         }
         if(p1->ex == p2->ex) {
             push(&ans, (p1->co + p2->co), p1->ex);
             p1 = p1->nterm;
             p2 = p2->nterm;
+            printf("DEBUG | break 5.\n");
+            continue;
         }
     }
+    printf("DEBUG | loop complete.\n");
     printfPoly(*ansHead);
     delList(ansHead);
 }
@@ -358,9 +370,11 @@ void Pmult() {
         printf("The variable(s) is empty!\n");
         return;
     }
+
     double co;
     int ex;
     char notCreate=1;
+
     // iterate p1
     while(p1 != NULL) {
         // iterate p2
@@ -403,8 +417,10 @@ void Pmult() {
         p1 = p1->nterm;
         p2 = polyHead[c2];
     }
+
     printfPoly(*ansHead);
     delList(ansHead);
+
 }
 
 void Peval() {
@@ -419,5 +435,24 @@ void Peval() {
         ans += p->co * pow(x, p->ex);
         p = p->nterm;
     }
+
     printf("%.1lf\n", ans);
 }
+
+/* Test cases
+
+1 
+A=x
+1
+B=12x^2-3x+3.2
+1
+C=-5x^10+4x-1.2
+1
+D=-x+11
+
+
+A=7x^5+2.3x^4+0.1x-5
+B=3x^4+2.3x^2+x-5
+C=2x^3+2.3x^2+x-5
+
+*/

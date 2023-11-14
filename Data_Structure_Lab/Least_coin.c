@@ -7,20 +7,35 @@ typedef struct value {
 } value;
 
 int main() {
+    // input money
     int money;
     scanf("%d", &money);
-    value *head, *current=NULL;
+    // store value into linked list
+    value *head, *current, *temp;
+    head = current = temp = NULL;
     for(int i=100; i>=1; i/=10) {
-        head = (value*)malloc(sizeof(value));
-        head->coin = money/i;
-        money /= i;
-        head->next = current;
-        current = head;
+        temp = (value*)malloc(sizeof(value));
+        temp->next = NULL;
+        temp->coin = money/i;
+        money %= i;
+        if(head == NULL) {
+            head = current = temp;
+        }
+        else {
+            current->next = temp;
+            current = current->next;
+        }
     }
-    value *temp = head;
-    while(head != NULL) {
-        printf("%d ", temp->coin);
-        temp = temp->next;
-    }       
+    // print result
+    current = head;
+    while(current != NULL) {
+        if(current->next == NULL) {
+            printf("%d", current->coin);
+        }
+        else {
+            printf("%d ", current->coin);
+        }
+        current = current->next;
+    }
     return 0;
 }

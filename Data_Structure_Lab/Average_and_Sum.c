@@ -9,15 +9,27 @@ typedef struct number
 
 
 int main() {
-    // Calculate ave of five numbers
-    number *head=NULL, *current;
-    float ave = 0;
+    // store five numbers into linked list
+    number *head, *current, *temp;
+    head = current = temp = NULL;
     for(int i=0; i<5; i++) {
-        current = (number*)malloc((sizeof(number)));
-        scanf("%f", &(current->num));
-        ave += (current->num);
-        current->next = head;
-        head = current;
+        temp = (number*)malloc(sizeof(number));
+        temp->next = NULL;
+        scanf("%f", &(temp->num));
+        if(head == NULL) {
+            head = current = temp;
+        }
+        else {
+            current->next = temp;
+            current = current->next;
+        }
+    }
+    // Calculate average of five numbers
+    float ave = 0;
+    current = head;
+    while(current != NULL) {
+        ave += current->num;
+        current = current->next;
     }
     ave /= 5;
     printf("%.2f\n", ave);

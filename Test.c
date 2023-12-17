@@ -1,142 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <float.h>
-#include <math.h>
-#include <stdbool.h>
-#include <ctype.h>
 
-typedef struct func{
-    int coe;
-    char var;
-    int index;
-    struct func *next;
-}func;
+// 定義二元樹節點結構
+typedef struct TreeNode {
+    char data[50]; // 假設每個節點最多有50個字符
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
 
-
-typedef struct equPointers{
-    int n;
-    char code;
-    struct func *first;
-    struct equPointers *next;
-}equPointers;
-
-bool isNumber(const char *str) {
-    if (str == NULL || *str == '\0') return false;
-    if (*str == '+' || *str == '-') str++;
-    bool hasDot = false;
-    bool hasDigit = false;
-    while (*str != '\0') {
-        if (*str >= '0' && *str <= '9') {
-            hasDigit = true;
-        } else if (*str == '.') {
-            if (hasDot) return false;
-            hasDot = true;
-        } else {
-            return false;
-        }
-        str++;
+// 創建一個新的樹節點
+TreeNode *createNode(const char *data) {
+    TreeNode *newNode = (TreeNode *)malloc(sizeof(TreeNode));
+    if (newNode != NULL) {
+        strncpy(newNode->data, data, sizeof(newNode->data) - 1);
+        newNode->data[sizeof(newNode->data) - 1] = '\0'; // 確保字串結尾有終止符
+        newNode->left = NULL;
+        newNode->right = NULL;
     }
-    return hasDigit;
+    return newNode;
 }
 
-
-
-char save[10][10];
-int segmentation(char * poly){
-    int j = 0, k;
-    for (int i = 0; i < 10; i++){
-        for (int j = 0; j < 10; j++){
-            save[i][j] = '\0';
-        }
-    }
-    for (int i = 0; poly[i] != '\0'; i++){
-        k = 0;
-        if(poly[i] == '-'){
-            save[j][k] = '-';
-            k++;
-            i++;
-        }
-        for (; poly[i] != '*' && poly[i] != '\0'; i++){
-            save[j][k] = poly[i];
-            k++;
-        }
-        if (poly[i+1] == '-') i++;
-        j++;
-    }
-    return j;
+// 比較函數，僅考慮字母
+int compareChars(const void *a, const void *b) {
+    return (*(char *)a - *(char *)b);
 }
 
-bool debug(){
-    for (int i = 0; save[i][0] != '\0'; i++){
-        int k = 0;
-        for (int j = 0; save[i][j] != '\0'; j++)
-            if (save[i][j] == 'x' || save[i][j] == 'y' || save[i][j] == 'z') k++;
-        if (k > 1) return true;
-    }
-    return false;
+// 對字串內的字符進行排序，僅考慮字母
+void sortStringChars(char *str) {
+    qsort(str, strlen(str), sizeof(char), compareChars);
 }
 
-func * anapoly(bool error){
-    func * Nhead = 0, * Nlast = 0;
-    for (int i = 0; save[i][0] != '\0'; i++){
-        func * Nnew = malloc(sizeof(func));
-        Nnew -> next = 0;
-        char coe[100] = {'\0'}, index[100] = {'\0'};
-        int j = 0;
-        for (; save[i][j] != 'x' && save[i][j] != 'y' && save[i][j] != 'z' && save[i][j] != '\0'; j++) coe[j] = save[i][j];
-        if(!j) coe[j] = '1';
-        if(isNumber(coe)) Nnew -> coe = atoi(coe);
-        else if(coe[0] == '-') Nnew -> coe = -1;
-        if(save[i][j] != '\0'){
-            Nnew -> var = save[i][j];
-            if (save[i][j+1] == '^'){
-                int k = 0;
-                for ( j=j+2; save[i][j] != '\0'; j++){
-                    index[k] = save[i][j];
-                    k++;
-                }
-            }else{
-                index[0] = '1';
-            }
-            if(isNumber(index)) Nnew -> index = atoi(index);
-        }else
-            Nnew -> var = '0';
-        if (!Nhead){
-            Nlast = Nnew;
-            Nhead = Nnew;
-        }else{
-            Nlast -> next = Nnew;
-            Nlast = Nnew;
-        }
-        if (error) printf("ERROR\n");
-        else if(Nnew -> var == '0') printf("%d %c\n", Nnew -> coe, Nnew -> var);
-        else printf("%d %c %d\n", Nnew -> coe, Nnew -> var, Nnew -> index);
+// 插入節點到二元樹，並在插入後直接輸出排序後的字串
+TreeNode *insert(TreeNode *root, const char *data) {
+    if (root == NULL) {
+        // 創建新節點
+        TreeNode *newNode = createNode(data);
+
+        // 對字串內的字符進行排序
+        sortStringChars(newNode->data);
+
+        // 輸出排序後的字串
+        printf("Sorted string: %s\n", newNode->data);
+
+        return newNode;
     }
-    return Nhead;
+
+    int compareResult = strcmp(data, root->data);
+
+    if (compareResult < 0) {
+        root->left = insert(root->left, data);
+    } else if (compareResult > 0) {
+        root->right = insert(root->right, data);
+    }
+
+    return root;
 }
 
-equPointers * Phead = 0, * Plast = 0;
+// 主函數
+int main() {
+    TreeNode *root = NULL;
+    char inputString[50];
 
-int main(){
-    while (1){
-        bool error = false;
-        char poly[256] = {"\0"};
-        scanf("%s", poly);
-        if (poly[0] == '0') break;
-        equPointers * new = malloc(sizeof(equPointers));
-        new -> next = 0;
-        new -> n = segmentation(poly);
-        error = debug();
-        new -> first = anapoly(error);
-        if (!Phead){
-            Plast = new;
-            Phead = new;
-        }else{
-            Plast -> next = new;
-            Plast = new;
+    printf("Please enter strings continuously, enter '0' to quit:\n");
+
+    while (1) {
+        // 使用者輸入字串
+        printf("Enter a string: ");
+        scanf("%s", inputString);
+
+        // 檢查是否輸入0
+        if (strcmp(inputString, "0") == 0) {
+            printf("Quit\n");
+            break;
         }
+
+        // 插入節點
+        root = insert(root, inputString);
     }
-    printf("quit\n");
+
     return 0;
 }

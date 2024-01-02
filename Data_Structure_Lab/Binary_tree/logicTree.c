@@ -32,7 +32,7 @@ treePointer *logicTree (char *input) {
         if(input[i]=='^' || input[i]=='v') {
             b = true;
             break;
-        }   
+        }
     }
     if(b == true) {
         newTree->data = input[i];

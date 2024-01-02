@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#define maxSize 100
+#define maxKey 100
+#define maxData 21
 
 struct element {
     int index;
-    int key[maxSize];
-    char c1[maxSize][maxSize], c2[maxSize][maxSize], c3[maxSize][maxSize], c4[maxSize][maxSize];
+    int key[maxKey];
+    char c1[maxKey][maxData], c2[maxKey][maxData], c3[maxKey][maxData], c4[maxKey][maxData];
 } element;
 
 
@@ -28,17 +29,17 @@ void checkKey(int key) {
 void input() {
     scanf("%d", &element.key[element.index]);
     getchar();
-    char temp1[maxSize], temp2[maxSize], temp3[maxSize], temp4[maxSize];
+    char temp1[maxData], temp2[maxData], temp3[maxData], temp4[maxData];
     fgets(temp1, sizeof(temp1), stdin);
-    temp1[strlen(temp1)-1] = '\0';
     fgets(temp2, sizeof(temp2), stdin);
-    temp2[strlen(temp2)-1] = '\0';
     fgets(temp3, sizeof(temp3), stdin);
-    temp3[strlen(temp3)-1] = '\0';
     fgets(temp4, sizeof(temp4), stdin);
-    checkKey(element.key[element.index]);
+    temp1[strlen(temp1)-1] = '\0';
+    temp2[strlen(temp2)-1] = '\0';
+    temp3[strlen(temp3)-1] = '\0';
     temp4[strlen(temp4)-1] = '\0';
-    for(int i=0; i<maxSize; i++) {
+    checkKey(element.key[element.index]);
+    for(int i=0; i<maxData; i++) {
         element.c1[element.index][i] = temp1[i];
         element.c2[element.index][i] = temp2[i];
         element.c3[element.index][i] = temp3[i];

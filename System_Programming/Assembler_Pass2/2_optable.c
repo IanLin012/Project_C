@@ -1,4 +1,10 @@
-#include "token.c"
+/***********************************************************************/
+/*  Program Name: 2-optable.c                                                   */
+/*  This program processes a SIC/XE assembler program and  */
+/*  build OPTABLE.                                                                      */
+/*  2019.12.12                                                                              */
+/************************************************************************/
+#include "1_token.c"
 
 /* Public variables and functions */
 #define	FMT0		0x00		/* SIC Assembler Directive */
@@ -6,16 +12,17 @@
 #define	FMT2		0x02		/* Format 2 */
 #define	FMT3		0x04		/* Format 3 */
 #define	FMT4		0x08		/* Format 4 */
-#define	OP_BYTE		0x101
-#define	OP_WORD		0x102
-#define	OP_RESB		0x103
-#define	OP_RESW		0x104
-#define	OP_BASE		0x105
+#define	OP_BYTE	0x101
+#define	OP_WORD	0x102
+#define	OP_RESB	0x103
+#define	OP_RESW	0x104
+#define	OP_BASE	0x105
 #define	OP_NOBASE	0x106
 #define	OP_START	0x107
 #define	OP_END		0x108
 
-typedef struct {
+typedef struct
+{
 	char		op[LEN_SYMBOL];
 	unsigned	fmt;
 	unsigned	code;
@@ -97,8 +104,9 @@ Instruction	OPTAB[] = {
 
 int LEN_OPTAB = sizeof(OPTAB) / sizeof(Instruction);
 
-Instruction *is_opcode(char *op) {
+Instruction *is_opcode(char *op)
 /* retuen pointer to OPTAB[i] if it is found, else return NULL */
+{
 	int		begin = 0;
 	int		end = LEN_OPTAB - 1;
 	int		mid, c;
@@ -106,7 +114,8 @@ Instruction *is_opcode(char *op) {
 	char		*p;
 	
 	/* Translate lowercase to capital */
-	for(c = 0, p = op ; *p != '\0' ; c++, p++) {
+	for(c = 0, p = op ; *p != '\0' ; c++, p++)
+	{
 		if(*p <= 'z' && *p >= 'a')
 			buf[c] = *p - 'a' + 'A';
 		else
@@ -115,7 +124,8 @@ Instruction *is_opcode(char *op) {
 	buf[c] = '\0';
 	
 	/* binary search */
-	while(begin <= end) {
+	while(begin <= end)
+	{
 		mid = (begin + end)/2;
 		c = strcmp(buf, OPTAB[mid].op);
 		if(c == 0)

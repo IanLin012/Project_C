@@ -1,5 +1,4 @@
-#include <string.h>
-#include "optable.c"
+#include "2_optable.c"
 
 /* Public variables and functions */
 #define	ADDR_SIMPLE		0x01
